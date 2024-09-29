@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %} {% endblock %}</title>
+        <link rel="stylesheet"  href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <style>
+            html {
+                overflow-y: hidden;
+            }
+        </style>
+    </head>
+
+    <body>
+        <section class="hero is-fullheight">
+          <div class="hero-head">
+             <nav class="navbar pt-4">
+              <div class="container">
+                <div id="navMenu" class="navbar-menu">
+                  <div class="navbar-start">
+                    <a class="navbar-item is-6" href="{% url 'index' %}">
+                        <p class="title">EduInsight</p>
+                    </a>
+                      <a class="navbar-item" href="{% url 'index' %}">
+                      Home
+                    </a>
+                    <a class="navbar-item" href="{%  url 'marks_scraper' %}">
+                      Marks Scraper
+                    </a>
+                    <a class="navbar-item" href="{%  url 'marks_analyser' %}">
+                      Marks Analyser
+                    </a>
+                    <a class="navbar-item" href="{%  url 'working' %}">
+                      How It Works
+                    </a>
+                  </div>
+                  <div class="navbar-end">
+                    <div class="navbar-item">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </div>
+
+          <div class="hero-body">
+            <div class="container">
+              {% block content %}
+                {% endblock %}
+            </div>
+          </div>
+
+           <div class="hero-foot">
+              <div class="container has-text-centered pb-4">
+                  <p>
+                  Developed Under Mentorship of
+                  <strong>Dr. Dhanashree Kulkarni</strong> HOD, Dept. of CSE
+                  by
+                  <strong>Tilak Mirajkar</strong> &
+                  <strong>Abhishek Shinde</strong>
+                </p>
+              </div>
+            </div>
+        </section>
+    </body>
+
+</html>

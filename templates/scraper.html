@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}Marks Scraper{% endblock %}
+
+{% block content %}
+    <div class="container is-max-tablet">
+        <form method="post" id="usn-form" autocomplete="off">
+        {% csrf_token %}
+        <div class="field">
+            <label class="label">First 7 Charters of USN</label>
+            <div class="control">
+                {{ form.prefix_usn }}
+            </div>
+            <p class="help is-danger is-hidden" id="prefix_usn_error">USN Error! Enter USN with valid first 7 characters.</p>
+        </div>
+        <div class="field">
+            <label class="label">USN Range</label>
+            <div class="control">
+                {{ form.suffix_usn }}
+            </div>
+            <p class="help is-danger is-hidden" id="suffix_usn_error">Error! Enter the numbers in the proper format, without spaces.</p>
+        </div>
+        <div class="field">
+            <label class="label">Semester</label>
+            <div class="control">
+                {{ form.main_sem }}
+            </div>
+            <p class="help is-danger is-hidden" id="main_sem_error">Sem Error! Enter a number between 1 and 8.</p>
+        </div>
+        <div class="field">
+            <label class="label">Result Page URL</label>
+            <div class="control">
+                {{ form.url_value }}
+            </div>
+            <p class="help is-danger is-hidden" id="url_value_error">URL Error! Enter correct URL. (starts with https://results.vtu.ac.in/ and ends with index.php)</p>
+        </div><br>
+        <div class="field">
+            <p class="control">
+                <button class="button is-light is-fullwidth" type="submit">
+                    Submit
+                </button>
+            </p>
+        </div>
+    </form>
+    <div id="loading-animation" class="is-hidden">
+        <div class="has-text-centered">
+            <p class="title">Hang tight! We’re processing your request...</p>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('usn-form');
+    const prefixUsn = form.querySelector('[name="prefix_usn"]');
+    const suffixUsn = form.querySelector('[name="suffix_usn"]');
+    const mainSem = form.querySelector('[name="main_sem"]');
+    const urlValue = form.querySelector('[name="url_value"]');
+
+    const prefixUsnError = document.getElementById('prefix_usn_error');
+    const suffixUsnError = document.getElementById('suffix_usn_error');
+    const mainSemError = document.getElementById('main_sem_error');
+    const urlValueError = document.getElementById('url_value_error');
+
+    const regexes = {
+        prefix_usn: /^\d{1}[A-Za-z]{2}\d{2}[A-Za-z]{2}$/,
+        suffix_usn: /^\d{1,3}([-,]\d{1,3})*$/,
+        main_sem: /^[1-8]$/,
+        url_value: /^https:\/\/results\.vtu\.ac\.in\/[a-zA-Z0-9]+\/index\.php$/,
+    };
+
+    prefixUsn.addEventListener('input', () => {
+        if (!regexes.prefix_usn.test(prefixUsn.value)) {
+            prefixUsnError.classList.remove('is-hidden');
+        } else {
+            prefixUsnError.classList.add('is-hidden');
+        }
+    });
+
+    suffixUsn.addEventListener('input', () => {
+        if (!regexes.suffix_usn.test(suffixUsn.value)) {
+            suffixUsnError.classList.remove('is-hidden');
+        } else {
+            suffixUsnError.classList.add('is-hidden');
+        }
+    });
+
+    mainSem.addEventListener('input', () => {
+        if (!regexes.main_sem.test(mainSem.value)) {
+            mainSemError.classList.remove('is-hidden');
+        } else {
+            mainSemError.classList.add('is-hidden');
+        }
+    });
+
+    urlValue.addEventListener('input', () => {
+        if (!regexes.url_value.test(urlValue.value)) {
+            urlValueError.classList.remove('is-hidden');
+        } else {
+            urlValueError.classList.add('is-hidden');
+        }
+    });
+
+    form.addEventListener('submit', (event) => {
+        const isValid = Object.keys(regexes).every((field) => {
+            const input = form.querySelector(`[name="${field}"]`);
+            return regexes[field].test(input.value);
+        });
+
+        if (!isValid) {
+            event.preventDefault();
+        } else {
+            document.getElementById('loading-animation').classList.remove('is-hidden');
+            form.classList.add('is-hidden');
+        }
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('usn-form');
+    const loadingAnimation = document.getElementById('loading-animation');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent default form submission
+        const isValid = Object.keys(regexes).every((field) => {
+            const input = form.querySelector(`[name="${field}"]`);
+            return regexes[field].test(input.value);
+        });
+
+        if (!isValid) {
+           return null
+
+        } else {
+            loadingAnimation.classList.remove('is-hidden');
+            form.classList.add('is-hidden');
+
+            // Send form data via AJAX
+            const formData = new FormData(form);
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}' // Include CSRF token
+                    }
+                });
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    window.location.href = data.download_url; // Redirect to download URL
+                } else {
+                    loadingAnimation.classList.add('is-hidden');
+                    form.classList.remove('is-hidden');
+                    alert(data.message); // Display error message
+                }
+            } catch (error) {
+                loadingAnimation.classList.add('is-hidden');
+                form.classList.remove('is-hidden');
+                alert('An unexpected error occurred. Please try again.');
+            }
+        }
+    });
+});
+});
+
+</script>
+{% endblock %}
+
+{% comment %}
+{% extends 'base.html' %}
+
+
+{% block title %}Marks Scraper{% endblock %}
+
+{% block content %}
+    <div class="container is-max-tablet">
+    <form method="post">
+        {% csrf_token %}
+        <div class="field">
+            <label class="label">First 7 Charters of USN</label>
+            <div class="control">
+                {{ form.prefix_usn}}
+            </div>
+            {% if form.prefix_usn.errors %}
+                <p class="help is-danger">{{ form.prefix_usn.errors.0 }}</p>
+            {% endif %}
+            {% if form.prefix_usn.help_text %}
+                <p class="help">{{ form.prefix_usn.help_text }}</p>
+            {% endif %}
+        </div>
+        <div class="field">
+            <label class="label">USN Range</label>
+            <div class="control">
+                {{ form.suffix_usn}}
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Semester</label>
+            <div class="control">
+                {{ form.main_sem}}
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Result Page URL</label>
+            <div class="control">
+                {{ form.url_value}}
+            </div>
+        </div><br>
+        <div class="field">
+            <p class="control">
+                <button class="button is-success" type="submit">
+                    Submit
+                </button>
+            </p>
+        </div>
+    </form>
+    <div id="loading-animation" class="is-hidden">
+        <div>
+            <p>Hang tight! We’re processing your request...</p>
+        </div>
+    </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', () => {
+            document.getElementById('loading-animation').classList.remove('is-hidden');
+            form.classList.add('is-hidden');
+        });
+    });
+    </script>
+{% endblock %}
+{% endcomment %}

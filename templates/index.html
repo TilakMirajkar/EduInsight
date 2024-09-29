@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <section class="hero">
+      <div class="container has-text-centered">
+        <p class="title is-1">Unlock Your Academic Potential</p>
+          <p class="subtitle block">Effortlessly Analyze and Track Your VTU Semester Results with Our Automated Tool</p>
+          <div class="block">
+              <button class="button is-light mr-3"><a href="{% url 'marks_scraper' %}">Scrape Now</a></button>
+              <button class="button is-light mr-3"><a href="{% url 'marks_analyser' %}">Analyse Now</a></button>
+          </div>
+      </div>
+    </section>
+{% endblock %}

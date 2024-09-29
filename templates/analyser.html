@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Marks Analyser
+{% endblock %}
+
+{% block content %}
+    <div class="container is-flex is-flex-direction-column is-align-items-center is-justify-content-center">
+    <p class="title">Development Phase...</p>
+    </div>
+{#    <div class="container is-flex is-flex-direction-column is-align-items-center is-justify-content-center">#}
+{#        <form method="POST" enctype="multipart/form-data">#}
+{#            {% csrf_token %}#}
+{#            <div class="file has-name is-boxed is-centered">#}
+{#                <label class="file-label">#}
+{#                    <input class="file-input" type="file" name="excel_file" id="fileInput" required />#}
+{#                    <span class="file-cta">#}
+{#                        <span class="file-icon">#}
+{#                            <i class="fas fa-upload"></i>#}
+{#                        </span>#}
+{#                        <span class="file-label">Choose a file…</span>#}
+{#                    </span>#}
+{#                    <span class="file-name" id="fileName">No file selected</span>#}
+{#                </label>#}
+{#            </div>#}
+{#            <p>#}
+{#                Upload Your Scraped File to Calculate SGPA/CGPA#}
+{#            </p>#}
+{##}
+{#            {% for semester, subjects in subjects.items %}#}
+{#                <div class="field">#}
+{#                    <label class="label">Credits for Subjects in {{ semester }}</label>#}
+{#                    <div class="control">#}
+{#                        <div class="field is-grouped is-grouped-multiline">#}
+{#                            {% for subject in subjects %}#}
+{#                                <div class="control">#}
+{#                                    <input class="input" type="text" name="credits" placeholder="Credit for {{ subject }}" required />#}
+{#                                </div>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{##}
+{#            <div class="block">#}
+{#                <button class="button is-light" type="submit">Upload File</button>#}
+{#            </div>#}
+{#        </form>#}
+{#    </div>#}
+{##}
+{#    <script>#}
+{#        document.getElementById('fileInput').addEventListener('change', function() {#}
+{#            document.getElementById('fileName').textContent = this.files[0] ? this.files[0].name : 'No file selected';#}
+{#        });#}
+{#    </script>#}
+{% endblock %}
